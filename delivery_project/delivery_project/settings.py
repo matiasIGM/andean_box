@@ -43,11 +43,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'api_restful',
     'drf_yasg',
+
 ]
 
-SWAGGER_SETTINGS = {
-    'DEFAULT_AUTO_SCHEMA_CLASS': 'drf_yasg.openapi.AutoSchema',
-}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -141,3 +140,4 @@ EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+
