@@ -16,6 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
+from drf_yasg import openapi
 
 # from api_restful.api.router import router_posts
 # from rest_framework import routers
@@ -29,8 +32,16 @@ from api_restful.api.views import (
     SucursalRetrieveUpdateDeleteView
 )
 
-# router = routers.DefaultRouter()
-# router.register(r'paquetes', EnvioViewSet)
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="API Documentation",
+        default_version='v1',
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,6 +53,8 @@ urlpatterns = [
     path('estados/<int:pk>/', EstadoEnvioRetrieveUpdateDeleteView.as_view(), name='estado-envio-retrieve-update-delete'),
     path('sucursales/', SucursalListCreateView.as_view(), name='sucursal-list-create'),
     path('sucursales/<int:pk>/', SucursalRetrieveUpdateDeleteView.as_view(), name='sucursal-Obtiene-Actualiza-Elimina'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
 

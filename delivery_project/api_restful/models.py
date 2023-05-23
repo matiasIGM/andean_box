@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.crypto import get_random_string
 from django.utils import timezone
 from django.utils.timezone import datetime
+import requests
+
 # Create your models here.
 # class Paquete(models.Model):
 #     title = models.CharField(max_length=255, default='blank title')
@@ -46,17 +48,17 @@ class Envio(models.Model):
     numero_seguimiento = models.CharField(max_length=7, unique=True, editable=False)
     direccion_origen = models.CharField(max_length=100, default="CD de distribución ENEA PUDAHUEL")
     nombre_destinatario = models.CharField(max_length=100)
+    comuna_destino = models.CharField(max_length=100, blank=True)
     direccion_destinatario = models.CharField(max_length=100, blank=True)
     email_destinatario = models.CharField(max_length=100, null=True, blank=True)
-    height = models.FloatField(null=True, blank=True)
-    width = models.FloatField(null=True, blank=True)
-    length = models.FloatField(null=True, blank=True)
-    weight = models.FloatField(null=True, blank=True)
+    height = models.FloatField( default=1)
+    width = models.FloatField(default=1)
+    length = models.FloatField( default=1)
+    weight = models.FloatField( default=1)
     items_count = models.IntegerField(default=1)
     cellphone = models.CharField(max_length=100, null=True, blank=True)
     destiny = models.CharField(max_length=100, null=True, blank=True)
     address_attributes = models.CharField(max_length=100, blank=True)
-    branch_office_id = models.IntegerField(null=True, blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_hora_recepcion = models.DateTimeField(null=True, blank=True)
     sucursal_destino = models.ForeignKey(Sucursal, on_delete=models.CASCADE, blank=True, null=True)
@@ -69,6 +71,8 @@ class Envio(models.Model):
         if not self.numero_seguimiento:
             self.numero_seguimiento = get_random_string(length=7, allowed_chars='0123456789')
         return super().save(*args, **kwargs)
+    
+
 
 class EstadoEnvio(models.Model):
     envio = models.ForeignKey(Envio, on_delete=models.CASCADE)
