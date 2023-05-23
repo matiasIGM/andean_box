@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils.crypto import get_random_string
 # Create your models here.
 # class Paquete(models.Model):
 #     title = models.CharField(max_length=255, default='blank title')
@@ -33,7 +33,7 @@ class Sucursal(models.Model):
         return self.nombre
 
 class Envio(models.Model):
-    numero_seguimiento = models.CharField(max_length=100, unique=True)
+    numero_seguimiento = models.CharField(max_length=7, unique=True, editable=False)
     direccion_origen = models.CharField(max_length=100, default="CD de distribución")
     nombre_destinatario = models.CharField(max_length=100)
     direccion_destinatario = models.CharField(max_length=100)
@@ -42,6 +42,11 @@ class Envio(models.Model):
 
     def __str__(self):
         return self.numero_seguimiento
+
+    def save(self, *args, **kwargs):
+        if not self.numero_seguimiento:
+            self.numero_seguimiento = get_random_string(length=7, allowed_chars='0123456789')
+        return super().save(*args, **kwargs)
 
 class EstadoEnvio(models.Model):
     envio = models.ForeignKey(Envio, on_delete=models.CASCADE)
