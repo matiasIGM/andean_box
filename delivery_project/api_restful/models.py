@@ -6,7 +6,7 @@ from django.utils.timezone import datetime
 
     
 class Sucursal(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=100, unique=True)
     direccion = models.CharField(max_length=100)
 
     def __str__(self):
@@ -43,9 +43,26 @@ class Envio(models.Model):
     
 
 
+# class EstadoEnvio(models.Model):
+#     envio = models.ForeignKey(Envio, on_delete=models.CASCADE)
+#     estado = models.CharField(max_length=100)
+#     fecha_hora_cambio = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.estado
+    
+
+
 class EstadoEnvio(models.Model):
-    envio = models.ForeignKey(Envio, on_delete=models.CASCADE)
-    estado = models.CharField(max_length=100)
+    ESTADOS_CHOICES = [
+        ('EN_PREPARACION', 'En preparación'),
+        ('EN_RUTA_A_DESTINO', 'En ruta a destino'),
+        ('ENTREGADO_A_DESTINATARIO', 'Entregado a destinatario'),
+        ('CANCELADO', 'Cancelado'),
+    ]
+
+    envio = models.ForeignKey(Envio, on_delete=models.CASCADE, related_name='estados')
+    estado = models.CharField(max_length=100, choices=ESTADOS_CHOICES)
     fecha_hora_cambio = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
